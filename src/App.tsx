@@ -3,6 +3,7 @@ import { Flask } from "./components";
 import { removeTop } from "./engine";
 import { Colors, Flasks } from "./types";
 import levels from "./levels";
+import { ReactComponent as ChevronRight } from "./icons/chevron-right.svg";
 
 function Game() {
   const [selectedFlasks, setSelectedFlasks] = useState<Array<number | null>>([
@@ -141,16 +142,16 @@ function Game() {
         ))}
       </div>
       {isLevelCompleted && (
-        <div>
+        <div className="level-info">
           <p className="success">
             {nextLevelExists
               ? "Congratuilations! You have completed this level!"
               : "You have completed all levels!"}
           </p>
           {nextLevelExists && (
-            <p className="next-level" onClick={startNextLevel}>
-              Next level
-            </p>
+            <div className="next-level" onClick={startNextLevel}>
+              <ChevronRight />
+            </div>
           )}
         </div>
       )}
