@@ -1,5 +1,5 @@
 body {
-  background: #000;
+  background: rgb(18, 18, 24);
 }
 
 .game {
@@ -10,15 +10,15 @@ body {
   min-height: 600px;
   flex-direction: column;
   .container {
-    width: 300px;
-    height: 600px;
+    width: 280px;
+    min-height: 320px;
+    max-height: 600px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
-    background: #000;
     padding: 20px;
-    gap: 10px;
+    gap: 20px;
   }
 }
 
@@ -28,12 +28,37 @@ body {
   align-items: center;
   flex-direction: column;
   background: rgb(255, 255, 255);
-  min-width: 28px;
-  height: 123px;
-  border-radius: 0 0 20px 20px;
-  overflow: hidden;
+  min-width: 30px;
+  height: 115px;
+  border-radius: 0 0 5px 5px;
   cursor: pointer;
   transition: transform 0.2s ease;
+  padding: 2px;
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #fff;
+    width: 10px;
+    height: 10px;
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    border-radius: 2px;
+    transform: translate(-35%, 0%);
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #fff;
+    width: 10px;
+    height: 10px;
+    clip-path: polygon(100% 0, 0 0, 0 100%);
+    border-radius: 2px;
+    transform: translate(35%, 0%);
+  }
   &--active {
     transform: translateY(-20px);
   }
@@ -42,6 +67,9 @@ body {
 .water-block {
   width: 25px;
   height: 25px;
+  &:last-child {
+    border-radius: 0 0 4px 4px;
+  }
 }
 
 * {
