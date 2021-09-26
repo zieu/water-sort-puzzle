@@ -108,6 +108,11 @@ function Game() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFlasks]);
 
+  const startNextLevel = () => {
+    setFlasks(template);
+    setIsLevelCompleted(false);
+  };
+
   return (
     <div className="game">
       <div className="container">
@@ -122,7 +127,12 @@ function Game() {
       </div>
       {isLevelCompleted && (
         <div>
-          <p className="success">You completed the level!</p>{" "}
+          <p className="success">
+            Congratuilations! You have completed the level!
+          </p>
+          <p className="retry" onClick={startNextLevel}>
+            Retry
+          </p>
         </div>
       )}
     </div>
