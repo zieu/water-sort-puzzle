@@ -1,0 +1,59 @@
+body {
+  background: #000;
+}
+
+.game {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  min-height: 600px;
+  flex-direction: column;
+  .container {
+    width: 300px;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background: #000;
+    padding: 20px;
+    gap: 10px;
+  }
+}
+
+.flask {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: column;
+  background: rgb(255, 255, 255);
+  min-width: 28px;
+  height: 123px;
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  &--active {
+    transform: translateY(-20px);
+  }
+}
+
+.water-block {
+  width: 25px;
+  height: 25px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+}
+
+.success {
+  color: #fff;
+}
