@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { Flask } from "./components";
 import { removeTop } from "./engine";
-import { harder as template } from "./templates";
 import { Colors, Flasks } from "./types";
+import levels from "./levels";
 
 function Game() {
   const [selectedFlasks, setSelectedFlasks] = useState<Array<number | null>>([
     null,
     null,
   ]);
-  const [flasks, setFlasks] = useState<Flasks>(template);
+  const [level, setLevel] = useState(0);
+  const [flasks, setFlasks] = useState<Flasks>(levels[level]);
   const [removedColors, setRemovedColors] = useState<Colors[] | null>(null);
   const [removedFlasks, setRemovedFlasks] = useState<Flasks | null>(null);
   const [isLevelCompleted, setIsLevelCompleted] = useState(false);
+  const [nextLevelExists, setNextLevelExists] = useState(true);
 
   const onSelect = (id: number) => {
     setSelectedFlasks((prev) => {
@@ -109,9 +111,22 @@ function Game() {
   }, [selectedFlasks]);
 
   const startNextLevel = () => {
-    setFlasks(template);
+    console.log(levels.length, "levels length");
+    console.log(level, "current level");
+
+    setLevel(nextLevelExists ? level + 1 : level);
     setIsLevelCompleted(false);
   };
+
+  useEffect(() => {
+    if (levels.length - 1 === level) {
+      setNextLevelExists(false);
+    }
+  }, [level]);
+
+  useEffect(() => {
+    setFlasks(levels[level]);
+  }, [level]);
 
   return (
     <div className="game">
@@ -128,11 +143,15 @@ function Game() {
       {isLevelCompleted && (
         <div>
           <p className="success">
-            Congratuilations! You have completed the level!
+            {nextLevelExists
+              ? "Congratuilations! You have completed this level!"
+              : "You have completed all levels!"}
           </p>
-          <p className="retry" onClick={startNextLevel}>
-            Retry
-          </p>
+          {nextLevelExists && (
+            <p className="next-level" onClick={startNextLevel}>
+              Next level
+            </p>
+          )}
         </div>
       )}
     </div>
