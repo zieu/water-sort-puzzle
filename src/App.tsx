@@ -21,9 +21,11 @@ function Game() {
   const [nextLevelExists, setNextLevelExists] = useState(true);
   const [levelModal, setLevelModal] = useState(false);
 
+  const firstFlask = selectedFlasks[0];
+  const secondFlask = selectedFlasks[1];
+
   const onSelect = (id: number) => {
     setSelectedFlasks((prev) => {
-      console.log("prev", prev[0]);
       return prev[0] !== null ? [prev[0], id] : [id, null];
     });
   };
@@ -31,14 +33,11 @@ function Game() {
   useEffect(() => {
     if (
       selectedFlasks.every((slot) => slot !== null) &&
-      selectedFlasks[0] !== selectedFlasks[1] &&
-      selectedFlasks[0] !== null
+      firstFlask !== secondFlask &&
+      firstFlask !== null
     ) {
       for (const flask of flasks) {
-        const first = selectedFlasks[0];
-
-        if (first === flask.id) {
-          console.log(flask, "first");
+        if (firstFlask === flask.id) {
           const { removedItems, timesRemoved } = removeTop(flask.colors);
           let newFlask = {
             colors: flask.colors.slice(timesRemoved),
@@ -53,53 +52,52 @@ function Game() {
       }
     }
 
-    if (
-      selectedFlasks[0] === selectedFlasks[1] &&
-      selectedFlasks.every((item) => !!item)
-    ) {
+    if (firstFlask === secondFlask && selectedFlasks.every((item) => !!item)) {
       setSelectedFlasks([null, null]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFlasks]);
 
   useEffect(() => {
-    console.log(removedColors);
-    if (!!selectedFlasks[1]) {
-      console.log("inside useeffect2 and selected 2");
-
+    if (!!secondFlask) {
       let newFlasks = flasks;
 
       for (const flask of flasks) {
-        const second = selectedFlasks[1];
-        if (second === flask.id && removedColors?.length) {
-          if (
-            (removedColors[0] === flask.colors[0] ||
-              flask.colors.length === 0) &&
-            removedFlasks?.length &&
-            flask.colors.length + removedColors.length <= 4
-          ) {
-            let newFlask = {
-              colors: removedColors?.concat(flask.colors) || [],
-              id: flask.id,
-            };
+        // conditions
+        const isSecondFlask = secondFlask === flask.id;
+        const removedColorsExist = !!removedColors?.length;
+        const doColorsMatch =
+          removedColors && removedColors[0] === flask.colors[0];
+        const isFlaskEmpty = flask.colors.length === 0;
+        const canFit =
+          removedFlasks?.length &&
+          removedColors &&
+          flask.colors.length + removedColors.length <= 4;
 
-            newFlasks = removedFlasks!.map((f) =>
-              f.id === newFlask.id ? newFlask : f
-            );
-          }
+        if (
+          isSecondFlask &&
+          removedColorsExist &&
+          (doColorsMatch || isFlaskEmpty) &&
+          canFit
+        ) {
+          let newFlask = {
+            colors: removedColors?.concat(flask.colors) || [],
+            id: flask.id,
+          };
+
+          newFlasks = removedFlasks!.map((f) =>
+            f.id === newFlask.id ? newFlask : f
+          );
         }
       }
 
-      console.log(newFlasks, "newFlasks");
-
       setFlasks(newFlasks);
-
       setSelectedFlasks([null, null]);
     }
+
     if (selectedFlasks[0] === selectedFlasks[1]) {
       setSelectedFlasks([null, null]);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [removedColors]);
 
@@ -116,9 +114,6 @@ function Game() {
   }, [selectedFlasks]);
 
   const startNextLevel = () => {
-    console.log(levels.length, "levels length");
-    console.log(level, "current level");
-
     setLevel(nextLevelExists ? level + 1 : level);
     setIsLevelCompleted(false);
   };
@@ -126,6 +121,8 @@ function Game() {
   useEffect(() => {
     if (levels.length - 1 === level) {
       setNextLevelExists(false);
+    } else {
+      setNextLevelExists(true);
     }
   }, [level]);
 
@@ -146,6 +143,7 @@ function Game() {
     setFlasks(levels[level]);
     setLevelModal(false);
     setIsLevelCompleted(false);
+    setLevel(level);
   };
 
   return (
