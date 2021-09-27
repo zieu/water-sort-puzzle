@@ -4,6 +4,9 @@ import { removeTop } from "./engine";
 import { Colors, Flasks } from "./types";
 import levels from "./levels";
 import { ReactComponent as ChevronRight } from "./icons/chevron-right.svg";
+import { ReactComponent as Retry } from "./icons/repeat.svg";
+import { ReactComponent as Levels } from "./icons/levels.svg";
+import { ReactComponent as Close } from "./icons/x.svg";
 
 function Game() {
   const [selectedFlasks, setSelectedFlasks] = useState<Array<number | null>>([
@@ -16,6 +19,7 @@ function Game() {
   const [removedFlasks, setRemovedFlasks] = useState<Flasks | null>(null);
   const [isLevelCompleted, setIsLevelCompleted] = useState(false);
   const [nextLevelExists, setNextLevelExists] = useState(true);
+  const [levelModal, setLevelModal] = useState(false);
 
   const onSelect = (id: number) => {
     setSelectedFlasks((prev) => {
@@ -129,8 +133,48 @@ function Game() {
     setFlasks(levels[level]);
   }, [level]);
 
+  const retry = () => {
+    setFlasks(levels[level]);
+    setIsLevelCompleted(false);
+  };
+
+  const chooseLevel = () => {
+    setLevelModal(true);
+  };
+
+  const changeLevel = (level: number) => {
+    setFlasks(levels[level]);
+    setLevelModal(false);
+    setIsLevelCompleted(false);
+  };
+
   return (
     <div className="game">
+      <div className="levels">
+        <div className="button" onClick={chooseLevel}>
+          <Levels />
+        </div>
+      </div>
+
+      {levelModal && (
+        <div className="levels-modal">
+          <Close className="close" onClick={() => setLevelModal(false)} />
+          {levels.map((lvl, index) => (
+            <div className="menu-level" onClick={() => changeLevel(index)}>
+              Level {index + 1}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <nav className="nav">
+        <p className="level">Level {level + 1}</p>
+
+        <div className="button" onClick={retry}>
+          <Retry />
+        </div>
+      </nav>
+
       <div className="container">
         {flasks.map(({ colors, id }) => (
           <Flask
@@ -142,14 +186,14 @@ function Game() {
         ))}
       </div>
       {isLevelCompleted && (
-        <div className="level-info">
+        <div className="progress-info">
           <p className="success">
             {nextLevelExists
-              ? "Congratuilations! You have completed this level!"
-              : "You have completed all levels!"}
+              ? "CONGRATULATIONS! YOU HAVE COMPLETED THIS LEVEL!"
+              : "YOU HAVE COMPLETED ALL LEVELS!"}
           </p>
           {nextLevelExists && (
-            <div className="next-level" onClick={startNextLevel}>
+            <div className="button" onClick={startNextLevel}>
               <ChevronRight />
             </div>
           )}

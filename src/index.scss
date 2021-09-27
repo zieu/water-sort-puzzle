@@ -1,5 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap");
+
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -moz-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+html {
+  font-size: 20px;
+}
+
 body {
   background: rgb(18, 18, 24);
+  font-family: "Fredoka One", sans-serif;
+  color: #fff;
 }
 
 .game {
@@ -87,15 +100,18 @@ ul {
   margin-bottom: 10px;
 }
 
-.level-info {
+.progress-info {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 10px;
+  position: absolute;
+  bottom: 0;
+  padding: 100px;
 }
-.next-level {
+.button {
   cursor: pointer;
   color: #fff;
   text-align: center;
@@ -110,5 +126,54 @@ ul {
   transition: background 0.3s ease;
   &:hover {
     background: rgba(255, 255, 255, 0.144);
+  }
+}
+
+.nav {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  top: 0;
+  padding: 30px;
+  gap: 20px;
+  @media screen and (max-width: 400px) {
+    left: 0;
+  }
+  .level {
+    font-size: 32px;
+  }
+  .button {
+    margin: 0;
+  }
+}
+
+.levels {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 20px;
+}
+
+.levels-modal {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: rgb(53, 54, 66);
+  padding: 20px 20px 40px 20px;
+  z-index: 99;
+  border-radius: 10px;
+  width: 250px;
+  align-items: center;
+  .close {
+    align-self: flex-end;
+    cursor: pointer;
+  }
+  .menu-level {
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #8947dd;
   }
 }
