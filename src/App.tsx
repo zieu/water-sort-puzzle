@@ -30,6 +30,7 @@ function Game() {
     });
   };
 
+  // ON FIRST FLASK SELECTION
   useEffect(() => {
     if (
       selectedFlasks.every((slot) => slot !== null) &&
@@ -58,6 +59,7 @@ function Game() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFlasks]);
 
+  // ON SECOND FLASK SELECTION
   useEffect(() => {
     if (!!secondFlask) {
       let newFlasks = flasks;
@@ -186,12 +188,17 @@ function Game() {
       {isLevelCompleted && (
         <div className="progress-info">
           <p className="success">
-            {nextLevelExists
-              ? "CONGRATULATIONS! YOU HAVE COMPLETED THIS LEVEL!"
-              : "YOU HAVE COMPLETED ALL LEVELS!"}
+            {nextLevelExists ? (
+              <>
+                <div>CONGRATULATIONS!</div>
+                <div>YOU HAVE COMPLETED THIS LEVEL!</div>
+              </>
+            ) : (
+              "YOU HAVE COMPLETED ALL LEVELS!"
+            )}
           </p>
           {nextLevelExists && (
-            <div className="button" onClick={startNextLevel}>
+            <div className="button bg-magenta" onClick={startNextLevel}>
               <ChevronRight />
             </div>
           )}

@@ -7,6 +7,7 @@
 
 html {
   font-size: 20px;
+  line-height: 24px;
 }
 
 body {
@@ -119,6 +120,7 @@ ul {
 .success {
   color: #fff;
   margin-bottom: 10px;
+  font-size: 16px;
 }
 
 .progress-info {
@@ -147,6 +149,13 @@ ul {
   transition: background 0.2s ease;
   &:hover {
     background: #ffffff25;
+  }
+}
+
+.bg-magenta {
+  background: #8947dd;
+  &:hover {
+    background: #9959ec;
   }
 }
 
