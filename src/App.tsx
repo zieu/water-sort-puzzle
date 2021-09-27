@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { Flask } from "./components";
 import { removeTop } from "./engine";
-import { Colors, Flasks } from "./types";
+import { Colors, Flasks, Flask as TFlask } from "./types";
 import levels from "./levels";
-import { ReactComponent as ChevronRight } from "./icons/chevron-right.svg";
-import { ReactComponent as Retry } from "./icons/repeat.svg";
-import { ReactComponent as Levels } from "./icons/levels.svg";
-import { ReactComponent as Close } from "./icons/x.svg";
+import { ChevronRight, Close, Levels, Retry } from "./icons";
+
+// icons
 
 function Game() {
   const [selectedFlasks, setSelectedFlasks] = useState<Array<number | null>>([
@@ -59,6 +58,25 @@ function Game() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFlasks]);
 
+  const validateFlasks = (flask: TFlask) => {
+    const isSecondFlask = secondFlask === flask.id;
+    const removedColorsExist = !!removedColors?.length;
+    const doColorsMatch = removedColors && removedColors[0] === flask.colors[0];
+    const isFlaskEmpty = flask.colors.length === 0;
+    const canFit =
+      removedFlasks?.length &&
+      removedColors &&
+      flask.colors.length + removedColors.length <= 4;
+
+    return {
+      isFlaskEmpty,
+      canFit,
+      isSecondFlask,
+      removedColorsExist,
+      doColorsMatch,
+    };
+  };
+
   // ON SECOND FLASK SELECTION
   useEffect(() => {
     if (!!secondFlask) {
@@ -66,15 +84,13 @@ function Game() {
 
       for (const flask of flasks) {
         // conditions
-        const isSecondFlask = secondFlask === flask.id;
-        const removedColorsExist = !!removedColors?.length;
-        const doColorsMatch =
-          removedColors && removedColors[0] === flask.colors[0];
-        const isFlaskEmpty = flask.colors.length === 0;
-        const canFit =
-          removedFlasks?.length &&
-          removedColors &&
-          flask.colors.length + removedColors.length <= 4;
+        const {
+          canFit,
+          doColorsMatch,
+          isFlaskEmpty,
+          isSecondFlask,
+          removedColorsExist,
+        } = validateFlasks(flask);
 
         if (
           isSecondFlask &&
@@ -97,7 +113,7 @@ function Game() {
       setSelectedFlasks([null, null]);
     }
 
-    if (selectedFlasks[0] === selectedFlasks[1]) {
+    if (firstFlask === secondFlask) {
       setSelectedFlasks([null, null]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -160,7 +176,11 @@ function Game() {
         <div className="levels-modal">
           <Close className="close" onClick={() => setLevelModal(false)} />
           {levels.map((lvl, index) => (
-            <div className="menu-level" onClick={() => changeLevel(index)}>
+            <div
+              className="menu-level"
+              onClick={() => changeLevel(index)}
+              key={index}
+            >
               Level {index + 1}
             </div>
           ))}
@@ -187,7 +207,7 @@ function Game() {
       </div>
       {isLevelCompleted && (
         <div className="progress-info">
-          <p className="success">
+          <div className="success">
             {nextLevelExists ? (
               <>
                 <div>CONGRATULATIONS!</div>
@@ -196,7 +216,7 @@ function Game() {
             ) : (
               "YOU HAVE COMPLETED ALL LEVELS!"
             )}
-          </p>
+          </div>
           {nextLevelExists && (
             <div className="button bg-magenta" onClick={startNextLevel}>
               <ChevronRight />
