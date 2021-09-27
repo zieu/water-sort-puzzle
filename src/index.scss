@@ -48,6 +48,27 @@ body {
   transition: transform 0.2s ease;
   padding: 2px;
   position: relative;
+  ::before {
+    content: "";
+    position: absolute;
+    top: 53px;
+    left: 18px;
+    width: 6px;
+    height: 30px;
+    background: rgb(255, 255, 255, 0.08);
+    border-radius: 20px;
+  }
+  ::after {
+    content: "";
+    position: absolute;
+    top: 88px;
+    left: 18px;
+    width: 6px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+  }
+
   &::before {
     content: "";
     position: absolute;
